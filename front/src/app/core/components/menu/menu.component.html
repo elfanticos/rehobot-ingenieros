@@ -1,0 +1,22 @@
+<mat-nav-list>
+  <mat-list-item [routerLink]="['/client']" routerLinkActive="router-link-active" >
+    <mat-icon mat-list-icon>account_box</mat-icon>
+    <div mat-line>Clientes</div>
+  </mat-list-item>
+  <mat-list-item (click)="openProyect= !openProyect" [routerLink]="['/proyect']" routerLinkActive="router-link-active">
+    <mat-icon mat-list-icon>assignment</mat-icon>
+    <div mat-line>Proyectos</div>
+  </mat-list-item>
+  <div [@slideInOut]="isOpenProyect ? 'in': 'out'" class="mat-list-item__sub">
+    <mat-list-item [routerLink]="['/proyect/incidence']" routerLinkActive="router-link-active">
+      <div mat-line>Incidencias</div>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/proyect/advance']" routerLinkActive="router-link-active">
+      <div mat-line>Avances</div>
+    </mat-list-item>
+  </div>
+  <mat-list-item [routerLink]="['/user']" routerLinkActive="router-link-active">
+    <mat-icon mat-list-icon>account_circle</mat-icon>
+    <div mat-line>Usuarios</div>
+  </mat-list-item>
+</mat-nav-list>

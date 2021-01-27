@@ -1,0 +1,14 @@
+<div class="container">
+  <header>
+    <h1>Clientes</h1>
+  </header>
+  <section>
+    <div>
+      <button mat-raised-button color="primary" (click)="openModalRegister()">Nuevo Cliente</button>
+    </div>
+    <div>
+      <h2>Listado de clientes</h2>
+      <app-table-generic [data]="[]" [displayedColumns]="KEY_TABLE" [titlesColumns]="TITLE_COLUMNS_TABLE"></app-table-generic>
+    </div>
+  </section>
+</div>
