@@ -1,21 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProyectComponent } from './views/proyect/proyect.component';
-import { ProyectRoutingModule } from './proyect-routing.module';
+import { ProjectRoutingModule } from './project-routing.module';
 import { IncidenceComponent } from './views/incidence/incidence.component';
 import { AdvanceComponent } from './views/advance/advance.component';
-
+import { ProjectComponent } from './views/project/project.component';
 
 
 @NgModule({
   declarations: [
-    ProyectComponent,
+    ProjectComponent,
     IncidenceComponent,
     AdvanceComponent
   ],
   imports: [
     CommonModule,
-    ProyectRoutingModule
+    ProjectRoutingModule
   ]
 })
-export class ProyectModule { }
+export class ProjectModule { }

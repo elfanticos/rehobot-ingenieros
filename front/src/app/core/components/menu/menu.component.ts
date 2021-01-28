@@ -23,14 +23,14 @@ import { Component, OnInit } from '@angular/core';
 ]
 })
 export class MenuComponent implements OnInit {
-  openProyect: boolean = true;
+  openProject: boolean = true;
   constructor() { }
 
   ngOnInit(): void {
   }
 
-  get isOpenProyect(): boolean {
-    return this.openProyect;
+  get isOpenProject(): boolean {
+    return this.openProject;
   }
 
 }

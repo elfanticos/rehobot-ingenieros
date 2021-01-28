@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdvanceComponent } from './views/advance/advance.component';
 import { IncidenceComponent } from './views/incidence/incidence.component';
-import { ProyectComponent } from './views/proyect/proyect.component';
+import { ProjectComponent } from './views/project/project.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProyectComponent
+    component: ProjectComponent
   },
   {
     path: 'incidence',
@@ -23,4 +23,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ProyectRoutingModule { }
+export class ProjectRoutingModule { }
