@@ -16,4 +16,12 @@ export class ClientFacadeService {
     insert(values: any): Observable<any> {
         return this._clientService.insert(values);
     }
+
+    update(values: any, clientId: number): Observable<any> {
+        return this._clientService.update(values, clientId);
+    }
+
+    delete(clientId: number): Observable<any> {
+        return this._clientService.delete(clientId);
+    }
 }

@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Registrar cliente</h2>
+<h2 mat-dialog-title>{{data.client ? 'Editar cliente': 'Registrar cliente'}}</h2>
 <form [formGroup]="form" (ngSubmit)="submitForm()">
   <mat-dialog-content>
     <mat-form-field>

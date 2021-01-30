@@ -45,12 +45,23 @@ export class ModalClientRegisterComponent implements OnInit {
   onNoClick = (): void => { this.dialogRef.close(); }
 
   private _buildForm(): FormGroup {
-    const inputs = {
-      name: [null, [Validators.required]],
-      ruc: [null, [Validators.required]],
-      address: [null, [Validators.required]],
-      projects: [null]
+    console.log(this.data);
+    const client: any = this.data.client || {};
+
+    const inputs: any = {
+      name: [client.name, [Validators.required]],
+      ruc: [client.ruc, [Validators.required]],
+      address: [client.address, [Validators.required]],
     };
+
+    if (client.projects) {
+      const keyProjects = Array.from((client.projects || []), f => f['name']);
+      inputs.projects = [keyProjects];
+      console.log(keyProjects);
+      this.projectsSelected = keyProjects;
+    } else {
+      inputs.projects = [null]
+    }
 
     return this._fb.group(inputs);
   }

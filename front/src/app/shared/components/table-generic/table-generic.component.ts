@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,7 +12,6 @@ export class TableGenericComponent implements AfterViewInit {
   dataSource: MatTableDataSource<Object> = new MatTableDataSource<Object>([]);
   @Input()
   set data(value: any) {
-    console.log(value);
     this.dataSource = new MatTableDataSource<Object>(value);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -22,7 +21,8 @@ export class TableGenericComponent implements AfterViewInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
+  @Output() edit: EventEmitter<any> = new EventEmitter();
+  @Output() remove: EventEmitter<any> = new EventEmitter();
   constructor() {
   }
 
@@ -38,5 +38,13 @@ export class TableGenericComponent implements AfterViewInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
+  }
+
+  editRow(row: any): void {
+    this.edit.emit(row);
+  }
+
+  removeRow(row: any): void {
+    this.remove.emit(row);
   }
 }

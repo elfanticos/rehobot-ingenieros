@@ -19,4 +19,13 @@ export class ClientService {
         const headers = this._headerService.buildService();
         return this._http.post(`${environment.api}${environment.apiService.client.insert}`, body, headers);
     }
+
+    update(body: any, clientId: number): Observable<any> {
+        const headers = this._headerService.buildService();
+        return this._http.put(`${environment.api}${environment.apiService.client.update}/${clientId}`, body, headers);
+    }
+
+    delete(clientId: number): Observable<any> {
+        return this._http.delete(`${environment.api}${environment.apiService.client.delete}/${clientId}`)
+    }
 }
