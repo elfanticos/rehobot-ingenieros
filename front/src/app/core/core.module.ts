@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +18,7 @@ import { MenuComponent } from './components/menu/menu.component';
   declarations: [LoginComponent, FooterComponent, SidenavComponent, MenuComponent],
   imports: [
     CommonModule,
+    HttpClientModule,
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,

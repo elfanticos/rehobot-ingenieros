@@ -6,6 +6,10 @@ export const environment = {
   apiService: {
     client: {
       list: '/api/client/list',
+      insert: '/api/client/insert',
+    },
+    combo: {
+      projects: '/api/combo/projects'
     }
   }
 };

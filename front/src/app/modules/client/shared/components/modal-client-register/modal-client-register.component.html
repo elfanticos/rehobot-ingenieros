@@ -1,49 +1,43 @@
 <h2 mat-dialog-title>Registrar cliente</h2>
-<mat-dialog-content >
-  <mat-form-field>
-    <mat-label>Nombre o Razón social</mat-label>
-    <input type="text" name="name" matInput autocomplete="off"/>
-  </mat-form-field>
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Nombre o Razón social</mat-label>
+      <input type="text" name="name" matInput  formControlName="name" autocomplete="off" />
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>RUC</mat-label>
-    <input type="text" name="ruc" matInput autocomplete="off"/>
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>RUC</mat-label>
+      <input type="text" name="ruc" matInput formControlName="ruc" autocomplete="off" />
+    </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Dirección</mat-label>
-    <input type="text" name="address" matInput autocomplete="off"/>
-  </mat-form-field>
+    <mat-form-field>
+      <mat-label>Dirección</mat-label>
+      <input type="text" name="address" matInput formControlName="address" autocomplete="off" />
+    </mat-form-field>
 
-  <mat-form-field class="example-chip-list">
-    <mat-label>Proyectos</mat-label>
-    <mat-chip-list #chipList aria-label="proyect selection">
-      <mat-chip
-        *ngFor="let proyect of proyects"
-        [selectable]="selectable"
-        [removable]="removable"
-        (removed)="remove(proyect)">
-        {{proyect}}
-        <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-      </mat-chip>
-      <input
-        placeholder="New fruit..."
-        #proyectInput
-        [formControl]="proyectCtrl"
-        [matAutocomplete]="auto"
-        [matChipInputFor]="chipList"
-        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        (matChipInputTokenEnd)="add($event)">
-    </mat-chip-list>
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-      <mat-option *ngFor="let proyect of filteredProyects | async" [value]="proyect">
-        {{proyect}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+    <mat-form-field class="example-chip-list">
+      <mat-label>Proyectos</mat-label>
+      <mat-chip-list #chipList aria-label="proyect selection">
+        <mat-chip *ngFor="let project of projectsSelected" [selectable]="selectable" [removable]="removable"
+          (removed)="remove(project)">
+          {{project}}
+          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Selecciona projecto" #projectInput [formControl]="projectCtrl" [matAutocomplete]="auto"
+          [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+          (matChipInputTokenEnd)="add($event)">
+      </mat-chip-list>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let project of filteredProjects | async" [value]="project">
+          {{project}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-button [mat-dialog-close]="true">Guardar</button>
-</mat-dialog-actions>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button" (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="true" type="submit">Guardar</button>
+  </mat-dialog-actions>
+</form>

@@ -18,9 +18,11 @@ app
     .use(cors())
 
 const r_client = require('./api/client/client.routes');
+const r_combo = require('./api/combo/combo.routes');
 
 app
     .use('/api/client', r_client)
+    .use('/api/combo', r_combo)
 
 // configurations
 app.set('port', process.env.PORT || 3000);
