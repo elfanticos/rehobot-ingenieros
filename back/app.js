@@ -20,7 +20,7 @@ app
 const r_client = require('./api/client/client.routes');
 
 app
-    .use('/client', r_client)
+    .use('/api/client', r_client)
 
 // configurations
 app.set('port', process.env.PORT || 3000);

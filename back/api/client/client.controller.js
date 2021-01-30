@@ -10,7 +10,8 @@ const controller = {};
  * @param {express.Response} res 
  */
 controller.list = async(req, res) => {
-    res.status(200).send({ msj: 'Funciona list' });
+    const response = await clientService.list();
+    res.status(200).send(response);
 }
 
 
@@ -21,16 +22,16 @@ controller.list = async(req, res) => {
  */
 controller.insert = async(req, res) => {
     try {
-        const { name, ruc, address, projects } = req.body;
+        const { name, ruc, address, projects, personRegister } = req.body;
 
-        if (!name || !ruc || !address) {
-            throw { status: 400, msg: 'ANP' }
+        if (!name || !ruc || !address || !personRegister) {
+            throw { status: 400, msg: 'ANP' };
         }
-
-        const response = await clientService.insert(name, ruc, address, projects);
+        const response = await clientService.insert(name, ruc, address, projects, personRegister);
 
         res.status(200).send(response);
     } catch (error) {
+        console.log(error);
         res.status(error.status || 500).send(error);
     }
 }

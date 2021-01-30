@@ -12,6 +12,7 @@ export class TableGenericComponent implements AfterViewInit {
   dataSource: MatTableDataSource<Object> = new MatTableDataSource<Object>([]);
   @Input()
   set data(value: any) {
+    console.log(value);
     this.dataSource = new MatTableDataSource<Object>(value);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;

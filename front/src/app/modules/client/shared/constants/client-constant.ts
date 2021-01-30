@@ -1,13 +1,15 @@
 export const KEY_TABLE = [
     'name',
-    'proyect',
     'address',
+    'ruc',
+    'proyects',
     'action'
 ];
 
 export const TITLE_COLUMNS_TABLE = {
     name: 'Nombre o Razón social',
-    proyect: 'Proyectos',
-    titleenglish: 'Dirección',
+    address: 'Dirección',
+    ruc: 'RUC',
+    proyects: 'Proyectos',
     action: 'Acciones'
 }
