@@ -10,8 +10,15 @@ export const environment = {
       update: '/api/client/update',
       delete: '/api/client/delete'
     },
+    project: {
+      list: '/api/project/list',
+      insert: '/api/project/insert',
+      update: '/api/project/update',
+      delete: '/api/project/delete'
+    },
     combo: {
-      projects: '/api/combo/projects'
+      projects: '/api/combo/projects',
+      clients: '/api/combo/clients'
     }
   }
 };

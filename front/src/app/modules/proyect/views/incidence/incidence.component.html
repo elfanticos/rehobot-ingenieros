@@ -1,3 +1,20 @@
-<p>
-  incidence works!
-</p>
+<div class="container">
+  <header>
+    <h1>Proyectos</h1>
+  </header>
+  <section>
+    <div>
+      <button mat-raised-button color="primary" (click)="openModalRegister()">Nuevo Proyecto</button>
+    </div>
+    <div class="content-list">
+      <h2>Listado de proyectos</h2>
+      <app-table-generic 
+        [data]="incidences"
+        [displayedColumns]="KEY_TABLE"
+        [titlesColumns]="TITLE_COLUMNS_TABLE"
+        (edit)="openModalEdit($event)"
+        (remove)="openModalConfirmDelete($event)"
+      ></app-table-generic>
+    </div>
+  </section>
+</div>

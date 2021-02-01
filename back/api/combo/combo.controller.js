@@ -10,8 +10,28 @@ const controller = {};
  * @param {express.Response} res 
  */
 controller.projects = async(req, res) => {
-    const response = await comboService.projects();
-    res.status(200).send(response);
+    try {
+        const response = await comboService.projects();
+        res.status(200).send(response);
+    } catch (error) {
+        console.log(error);
+        res.status(error.status || 500).send(error);
+    }
+}
+
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+controller.clients = async(req, res) => {
+    try {
+        const response = await comboService.clients();
+        res.status(200).send(response);
+    } catch (error) {
+        console.log(error);
+        res.status(error.status || 500).send(error);
+    }
 }
 
 module.exports = controller;

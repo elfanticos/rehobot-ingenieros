@@ -14,4 +14,16 @@ model.projects = () => {
     });
 }
 
+model.clients = () => {
+    return new Promise((resolve, reject) => {
+        let sql = `SELECT client_id, name FROM client ORDER BY name`;
+        dbp.any(sql).then(data => {
+            return resolve(data);
+        }).catch(err => {
+            err.detalle = new Error().stack;
+            return reject(err);
+        });
+    });
+}
+
 module.exports = model;
