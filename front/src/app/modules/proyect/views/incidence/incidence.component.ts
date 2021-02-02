@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ComboService } from 'src/app/core/services/combo.service';
 import { ModalCofirmComponent } from 'src/app/shared/components/modal-cofirm/modal-cofirm.component';
 import { ModalIncidenceRegisterComponent } from '../../shared/components/modal-incidence-register/modal-incidence-register.component';
 
-import {KEY_TABLE, TITLE_COLUMNS_TABLE} from '../../shared/constants/incidence-constant';
+import { KEY_TABLE, TITLE_COLUMNS_TABLE } from '../../shared/constants/incidence-constant';
 import { IncidenceFacadeService } from '../../shared/services/incidence.service';
 
 @Component({
@@ -16,18 +17,30 @@ export class IncidenceComponent implements OnInit {
   incidences: any[] = [];
   KEY_TABLE = KEY_TABLE;
   TITLE_COLUMNS_TABLE = TITLE_COLUMNS_TABLE;
+  form: FormGroup;
   constructor(
     private _dialog: MatDialog,
     private _incidenceService: IncidenceFacadeService,
-    private _comboService: ComboService
-  ) { }
+    private _comboService: ComboService,
+    private _fb: FormBuilder
+  ) { 
+    this.form = this._buildForm();
+  }
 
   ngOnInit(): void {
-    // this.loadProjectList();
+    this.loadProjectList();
+  }
+
+  private _buildForm(): FormGroup {
+    return this._fb.group({
+      project: [null],
+      dateRegister: [null]
+    });
   }
 
   loadProjectList(): void {
-    this._incidenceService.list().subscribe(incidences => {
+    const { project, dateRegister } = this.form.value;
+    this._incidenceService.list(project, dateRegister).subscribe(incidences => {
       this.incidences = incidences;
     });
   }

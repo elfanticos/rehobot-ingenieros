@@ -20,11 +20,13 @@ app
 const r_client = require('./api/client/client.routes');
 const r_combo = require('./api/combo/combo.routes');
 const r_project = require('./api/project/project.routes');
+const r_incidence = require('./api/incidence/incidence.routes');
 
 app
     .use('/api/client', r_client)
     .use('/api/combo', r_combo)
     .use('/api/project', r_project)
+    .use('/api/incidence', r_incidence)
 
 // configurations
 app.set('port', process.env.PORT || 3000);

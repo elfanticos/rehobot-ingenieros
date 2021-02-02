@@ -1,13 +1,13 @@
 <div class="container">
   <header>
-    <h1>Proyectos</h1>
+    <h1>Incidencias</h1>
   </header>
   <section>
     <div>
-      <button mat-raised-button color="primary" (click)="openModalRegister()">Nuevo Proyecto</button>
+      <button mat-raised-button color="primary" (click)="openModalRegister()">Nueva incidencia </button>
     </div>
     <div class="content-list">
-      <h2>Listado de proyectos</h2>
+      <h2>Listado de incidencias</h2>
       <app-table-generic 
         [data]="incidences"
         [displayedColumns]="KEY_TABLE"

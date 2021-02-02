@@ -16,6 +16,12 @@ export const environment = {
       update: '/api/project/update',
       delete: '/api/project/delete'
     },
+    incidence: {
+      list: '/api/incidence/list',
+      insert: '/api/incidence/insert',
+      update: '/api/incidence/update',
+      delete: '/api/incidence/delete'
+    },
     combo: {
       projects: '/api/combo/projects',
       clients: '/api/combo/clients'

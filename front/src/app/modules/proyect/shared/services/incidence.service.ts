@@ -1,3 +1,4 @@
+import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { IncidenceService } from "./incidence/incidence.service";
@@ -8,8 +9,11 @@ export class IncidenceFacadeService {
         private _incidenceService: IncidenceService,
     ) { }
 
-    list(): Observable<any> {
-        return this._incidenceService.list();
+    list(projectId: number, dateRegister: any): Observable<any> {
+        const params = new HttpParams()
+            .set('projectId', String(projectId || ''))
+            .set('dateRegister', dateRegister || '')
+        return this._incidenceService.list(params);
     }
 
     insert(values: any): Observable<any> {

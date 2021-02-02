@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { HeadersService } from "src/app/core/services/headers.service";
@@ -11,8 +11,8 @@ export class IncidenceService {
         private _headerService: HeadersService
     ){}
 
-    list(): Observable<any> {
-        return this._http.get(`${environment.api}${environment.apiService.project.list}`);
+    list(params: HttpParams): Observable<any> {
+        return this._http.get(`${environment.api}${environment.apiService.incidence.list}`, {params});
     }
 
     insert(body: any): Observable<any> {

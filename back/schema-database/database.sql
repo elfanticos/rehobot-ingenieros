@@ -65,9 +65,10 @@ CREATE TABLE public.monitoring_x_project
     type character varying(5) NOT NULL,
     description character varying(250),
     state character varying(5) NOT NULL,
+    solution character varying(250) COLLATE pg_catalog."default",
+    date_reponse timestamp without time zone,
     person_id_register integer,
     date_register timestamp without time zone,
-    date_reponse timestamp without time zone,
     PRIMARY KEY (monitoring_x_project_id),
     CONSTRAINT "FK__project_x_client__project_x_client_id" FOREIGN KEY (_project_x_client_id)
         REFERENCES public.project_x_client (project_x_client_id) MATCH SIMPLE
