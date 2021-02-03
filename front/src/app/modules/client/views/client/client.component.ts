@@ -93,7 +93,7 @@ export class ClientComponent implements OnInit {
     });
   }
 
-  removeClient(dialogRef: MatDialogRef<ModalCofirmComponent, any>, clientId: any): void {
+  removeClient(dialogRef: MatDialogRef<ModalCofirmComponent, any>, clientId: number): void {
     this._clientService.delete(clientId).subscribe(res => {
       console.log(res);
       this.loadClientList();

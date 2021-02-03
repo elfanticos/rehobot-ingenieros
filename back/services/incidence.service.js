@@ -6,29 +6,29 @@ const service = {};
 
 /**
  * 
- * @param {String} name 
- * @param {String} duration 
- * @param {String} address 
- * @param {Number[]} clients 
+ * @param {Number} project 
+ * @param {String} description 
+ * @param {String} state 
+ * @param {String} solution 
+ * @param {String} dateResponse 
  * @param {Number} personRegister 
  */
-service.insert = async(name, duration, address, clients, personRegister) => {
-    clients = helper.__array_string(clients);
-    return await incidenceModel.insert(name, duration, address, clients, personRegister);
+service.insert = async(project, description, state, solution, dateResponse, personRegister) => {
+    return await incidenceModel.insert(project, description, state, solution, dateResponse, personRegister);
 }
 
 /**
  * 
- * @param {String} name 
- * @param {String} duration 
- * @param {String} address 
- * @param {Number[]} clients 
+ * @param {Number} project 
+ * @param {String} description 
+ * @param {String} state 
+ * @param {String} solution 
+ * @param {String} dateResponse 
  * @param {Number} personRegister 
- * @param {Number} projectId 
+ * @param {Number} incidenceId 
  */
-service.update = async(name, duration, address, clients, personRegister, projectId) => {
-    clients = helper.__array_string(clients);
-    return await incidenceModel.update(name, duration, address, clients, personRegister, projectId);
+service.update = async(project, description, state, solution, dateResponse, personRegister, incidenceId) => {
+    return await incidenceModel.update(project, description, state, solution, dateResponse, personRegister, incidenceId);
 }
 
 /**
@@ -42,10 +42,10 @@ service.list = async(projectId, dateRegister) => {
 
 /**
  * 
- * @param {Number} projectId 
+ * @param {Number} incidenceId 
  */
-service.delete = async(projectId) => {
-    return await incidenceModel.delete(projectId);
+service.delete = async(incidenceId) => {
+    return await incidenceModel.delete(incidenceId);
 }
 
 module.exports = service;

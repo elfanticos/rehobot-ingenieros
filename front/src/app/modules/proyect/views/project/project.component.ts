@@ -69,7 +69,7 @@ export class ProjectComponent implements OnInit {
     });
 
     dialogRef.componentInstance.send.subscribe(() => {
-      this.removeClient(dialogRef, project.project_id);
+      this.removeProject(dialogRef, project.project_id);
     })
   }
 
@@ -87,7 +87,7 @@ export class ProjectComponent implements OnInit {
     });
   }
 
-  removeClient(dialogRef: MatDialogRef<ModalCofirmComponent, any>, projectId: any): void {
+  removeProject(dialogRef: MatDialogRef<ModalCofirmComponent, any>, projectId: number): void {
     this._projectService.delete(projectId).subscribe(res => {
       this.loadProjectList();
       dialogRef.close();

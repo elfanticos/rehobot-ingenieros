@@ -1,0 +1,19 @@
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mat-card {
+    width: 450px;
+}
+
+.mat-card-content {
+    display: flex;
+    flex-direction: column;
+}
+.mat-card-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+

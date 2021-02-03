@@ -1,3 +1,26 @@
-<p>
-  advance works!
-</p>
+<div class="container">
+  <header>
+    <h1>Avance de proyecto</h1>
+  </header>
+  <section>
+    <mat-card>
+      <form [formGroup]="form" (ngSubmit)="submitForm()">
+        <mat-card-content>
+          <mat-form-field>
+            <mat-label>Proyecto</mat-label>
+            <mat-select formControlName="project">
+              <mat-option *ngFor="let p of projectList" [value]="p.project_id">{{p.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Motivo</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+        </mat-card-content>
+        <mat-card-actions >
+          <button mat-button type="submit">Guardar</button>
+        </mat-card-actions>
+      </form>
+    </mat-card>
+  </section>
+</div>

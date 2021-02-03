@@ -356,3 +356,172 @@ EXCEPTION
         RETURN __result;
 END;
 $BODY$;
+
+-- FUNCTION: public.incidence_insert(integer, character varying, character varying, timestamp without time zone, character varying, integer)
+
+-- DROP FUNCTION public.incidence_insert(integer, character varying, character varying, timestamp without time zone, character varying, integer);
+
+CREATE OR REPLACE FUNCTION public.incidence_insert(
+	__p_project_id integer,
+	__p_description character varying,
+	__p_state character varying,
+	__p_date_response timestamp without time zone,
+	__p_solution character varying,
+	__p_person_id_register integer)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+	__project_x_client_id INTEGER;
+	__monitoring_x_project_id INTEGER;
+	__date_register TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW();
+	__row_count INTEGER;
+BEGIN
+	
+	SELECT project_x_client_id
+	  INTO __project_x_client_id
+	  FROM project_x_client
+	 WHERE _project_id = __p_project_id;
+	
+	
+	INSERT INTO monitoring_x_project (_project_x_client_id, type, description, state, person_id_register, date_register, date_response, solution)
+		 VALUES (__project_x_client_id, 'INCID', __p_description, __p_state, __p_person_id_register, __date_register, __p_date_response, __p_solution)
+	  RETURNING monitoring_x_project_id
+	       INTO __monitoring_x_project_id;
+		   
+	GET DIAGNOSTICS __row_count = ROW_COUNT;
+	IF __row_count = 0 THEN
+		RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Error al regsitrar';
+	END IF;
+	
+	__result := JSONB_BUILD_OBJECT(
+		'msj' , 'Se registró',
+		'id', __monitoring_x_project_id
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;
+
+-- FUNCTION: public.incidence_update(integer, character varying, character varying, timestamp without time zone, character varying, integer, integer)
+
+-- DROP FUNCTION public.incidence_update(integer, character varying, character varying, timestamp without time zone, character varying, integer, integer);
+
+CREATE OR REPLACE FUNCTION public.incidence_update(
+	__p_project_id integer,
+	__p_description character varying,
+	__p_state character varying,
+	__p_date_response timestamp without time zone,
+	__p_solution character varying,
+	__p_person_id_register integer,
+	__p_monitoring_x_project_id integer)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+	__project_x_client_id INTEGER;
+	__row_count INTEGER;
+BEGIN
+	
+	SELECT project_x_client_id
+	  INTO __project_x_client_id
+	  FROM project_x_client 
+	 WHERE _project_id = __p_project_id;
+	
+	UPDATE monitoring_x_project
+	   SET description          = __p_description,
+	       state                = __p_state,
+		   date_response        = __p_date_response,
+		   solution             = __p_solution,
+		   _project_x_client_id = __project_x_client_id
+     WHERE monitoring_x_project_id = __p_monitoring_x_project_id;
+		   
+	GET DIAGNOSTICS __row_count = ROW_COUNT;
+	IF __row_count = 0 THEN
+		RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Error al regsitrar';
+	END IF;
+	
+	__result := JSONB_BUILD_OBJECT(
+		'msj' , 'Se editó'
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;
+
+-- FUNCTION: public.incidence_delete(integer)
+
+-- DROP FUNCTION public.incidence_delete(integer);
+
+CREATE OR REPLACE FUNCTION public.incidence_delete(
+	__p_monitoring_x_project_id integer)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+BEGIN
+
+	DELETE FROM monitoring_x_project 
+	      WHERE monitoring_x_project_id = __p_monitoring_x_project_id;
+	 
+	__result := JSONB_BUILD_OBJECT(
+		'msg' , 'Se eliminó'
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;

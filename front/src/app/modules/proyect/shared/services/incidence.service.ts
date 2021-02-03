@@ -20,11 +20,11 @@ export class IncidenceFacadeService {
         return this._incidenceService.insert(values);
     }
 
-    update(values: any, projectId: number): Observable<any> {
-        return this._incidenceService.update(values, projectId);
+    update(values: any, incidenceId: number): Observable<any> {
+        return this._incidenceService.update(values, incidenceId);
     }
 
-    delete(clientId: number): Observable<any> {
-        return this._incidenceService.delete(clientId);
+    delete(incidenceId: number): Observable<any> {
+        return this._incidenceService.delete(incidenceId);
     }
 }

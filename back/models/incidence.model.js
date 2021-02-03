@@ -2,10 +2,10 @@
 
 const model = {};
 
-model.insert = (name, duration, address, clients, personRegister) => {
+model.insert = (project, description, state, solution, dateResponse, personRegister) => {
     return new Promise((resolve, reject) => {
-        let sql = `SELECT public.project_insert($1, $2, $3, $4::INTEGER[], $5) res`;
-        sql = pgpromise.as.format(sql, [name, duration, address, clients, personRegister]);
+        let sql = `SELECT public.incidence_insert($1, $2, $3, $4, $5, $6) res`;
+        sql = pgpromise.as.format(sql, [project, description, state, dateResponse, solution, personRegister]);
         dbp.one(sql).then(data => {
             if (data.res.status) return reject(data.res);
             return resolve(data);
@@ -16,11 +16,10 @@ model.insert = (name, duration, address, clients, personRegister) => {
     });
 }
 
-model.update = (name, duration, address, clients, personRegister, projectId) => {
+model.update = (project, description, state, solution, dateResponse, personRegister, incidenceId) => {
     return new Promise((resolve, reject) => {
-        let sql = `SELECT public.project_update($1, $2, $3, $4::INTEGER[], $5, $6) res`;
-        sql = pgpromise.as.format(sql, [name, duration, address, clients, personRegister, projectId]);
-        console.log(sql);
+        let sql = `SELECT public.incidence_update($1, $2, $3, $4, $5, $6, $7) res`;
+        sql = pgpromise.as.format(sql, [project, description, state, dateResponse, solution, personRegister, incidenceId]);
         dbp.one(sql).then(data => {
             if (data.res.status) return reject(data.res);
             return resolve(data);
@@ -35,10 +34,15 @@ model.list = (projectId, dateRegister) => {
     return new Promise((resolve, reject) => {
         let sql = `
         SELECT p.name AS project_name,
+               p.project_id,
                mxp.date_register,
-               TO_CHAR(mxp.date_register, 'DD/MM/YYYY HH:MI:SS pm') AS date_register_format,
+               TO_CHAR(mxp.date_register, 'DD/MM/YYYY') AS date_register_format,
+               TO_CHAR(mxp.date_response, 'DD/MM/YYYY') AS date_response_format,
+               mxp.monitoring_x_project_id,
                mxp.description,
-               mxp.solution
+               mxp.solution,
+               mxp.state,
+               mxp.date_response
           FROM monitoring_x_project mxp
                INNER JOIN project_x_client pxc
                        ON pxc.project_x_client_id = mxp._project_x_client_id
@@ -57,10 +61,10 @@ model.list = (projectId, dateRegister) => {
     });
 }
 
-model.delete = (projectId) => {
+model.delete = (incidenceId) => {
     return new Promise((resolve, reject) => {
-        let sql = `SELECT public.project_delete($1) res`;
-        sql = pgpromise.as.format(sql, [projectId]);
+        let sql = `SELECT public.incidence_delete($1) res`;
+        sql = pgpromise.as.format(sql, [incidenceId]);
         dbp.one(sql).then(data => {
             if (data.res.status) return reject(data.res);
             return resolve(data);

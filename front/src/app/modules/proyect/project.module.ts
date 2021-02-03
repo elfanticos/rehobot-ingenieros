@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatRadioModule } from '@angular/material/radio';
+import {MatCardModule} from '@angular/material/card';
 
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ProjectRoutingModule } from './project-routing.module';
@@ -23,6 +25,19 @@ import { ModalProjectRegisterComponent } from './shared/components/modal-project
 import { ModalIncidenceRegisterComponent } from './shared/components/modal-incidence-register/modal-incidence-register.component';
 import { IncidenceService } from './shared/services/incidence/incidence.service';
 import { IncidenceFacadeService } from './shared/services/incidence.service';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/moment';
+import * as moment from 'moment';
+import localeEs from '@angular/common/locales/es';
+import { AdvanceService } from './shared/services/advance/advance.service';
+import { AdvanceFacadeService } from './shared/services/advance.service';
+
+registerLocaleData(localeEs);
+
+export function momentAdapterFactory() {
+  return adapterFactory(moment);
+};
 
 
 @NgModule({
@@ -47,13 +62,19 @@ import { IncidenceFacadeService } from './shared/services/incidence.service';
     MatSelectModule,
     MatDatepickerModule,
     MatChipsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: momentAdapterFactory }),
+    MatRadioModule,
+    MatNativeDateModule,
+    MatCardModule
   ],
   providers: [
     ProjectService,
     ProjectFacadeService,
     IncidenceService,
-    IncidenceFacadeService
+    IncidenceFacadeService,
+    AdvanceService,
+    AdvanceFacadeService
   ],
   entryComponents: [
     ModalProjectRegisterComponent,

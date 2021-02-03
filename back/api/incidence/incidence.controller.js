@@ -32,13 +32,13 @@ controller.insert = async(req, res) => {
 
         req.body.personRegister = 1;
 
-        const { name, duration, address, clients, personRegister } = req.body;
+        const { project, description, state, solution, dateResponse, personRegister } = req.body;
 
-        if (!name || !duration || !address || !personRegister) {
+        if (!project || !description || !state || !personRegister) {
             throw { status: 400, msg: 'ANP' };
         }
 
-        const response = await incidenceService.insert(name, duration, address, clients, personRegister);
+        const response = await incidenceService.insert(project, description, state, solution, dateResponse, personRegister);
 
         res.status(200).send(response);
     } catch (error) {
@@ -58,13 +58,13 @@ controller.update = async(req, res) => {
         req.body.personRegister = 1;
 
         const { id } = req.params;
-        const { name, duration, address, clients, personRegister } = req.body;
+        const { project, description, state, solution, dateResponse, personRegister } = req.body;
 
-        if (!name || !duration || !address || !personRegister) {
+        if (!project || !description || !state || !personRegister) {
             throw { status: 400, msg: 'ANP' };
         }
 
-        const response = await incidenceService.update(name, duration, address, clients, personRegister, id);
+        const response = await incidenceService.update(project, description, state, solution, dateResponse, personRegister, id);
 
         res.status(200).send(response);
     } catch (error) {

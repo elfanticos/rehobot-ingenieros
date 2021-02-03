@@ -25,6 +25,9 @@ export const environment = {
     combo: {
       projects: '/api/combo/projects',
       clients: '/api/combo/clients'
+    },
+    advance: {
+      insert: '/api/advance/insert'
     }
   }
 };

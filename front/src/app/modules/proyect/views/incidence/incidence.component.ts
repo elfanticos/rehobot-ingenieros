@@ -28,7 +28,7 @@ export class IncidenceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadProjectList();
+    this.loadIncidenceList();
   }
 
   private _buildForm(): FormGroup {
@@ -38,7 +38,7 @@ export class IncidenceComponent implements OnInit {
     });
   }
 
-  loadProjectList(): void {
+  loadIncidenceList(): void {
     const { project, dateRegister } = this.form.value;
     this._incidenceService.list(project, dateRegister).subscribe(incidences => {
       this.incidences = incidences;
@@ -52,57 +52,58 @@ export class IncidenceComponent implements OnInit {
         incidence
       }
     });
-    // let clients = [];
-    // this._comboService.clients().subscribe((res: any[]) => {
-    //   clients = res;
-    //   dialogRef.componentInstance.clientList = clients;
-    // });
+    let projects = [];
+    this._comboService.projects().subscribe((res: any[]) => {
+      projects = res;
+      dialogRef.componentInstance.projectList = projects;
+    });
 
-    // dialogRef.componentInstance.send.subscribe(values => {
-    //   if (project) {
-    //     this.editProject(dialogRef, values, project.project_id);
-    //   } else {
-    //     this.registerProject(dialogRef, values);
-    //   }
-    // });
+    dialogRef.componentInstance.send.subscribe(values => {
+      if (incidence) {
+        this.editIncidence(dialogRef, values, incidence.monitoring_x_project_id);
+      } else {
+        this.registerIncidence(dialogRef, values);
+      }
+    });
   }
 
 
-  openModalEdit(project: any): void {
-    this.openModalRegister(project);
+  openModalEdit(incidence: any): void {
+    console.log(incidence);
+    this.openModalRegister(incidence);
   }
 
-  openModalConfirmDelete(project: any): void {
+  openModalConfirmDelete(incidence: any): void {
     const dialogRef = this._dialog.open(ModalCofirmComponent, {
       width: '420px',
       data: {
-        title: 'Desea borrar el proyecto?',
+        title: 'Desea borrar la incidencia?',
         body: 'Recuerda al confirmar no podrá recuperarlo'
       }
     });
 
     dialogRef.componentInstance.send.subscribe(() => {
-      this.removeClient(dialogRef, project.project_id);
+      this.removeIncidence(dialogRef, incidence.monitoring_x_project_id);
     })
   }
 
-  registerProject(dialogRef: MatDialogRef<ModalIncidenceRegisterComponent, any>, values): void {
+  registerIncidence(dialogRef: MatDialogRef<ModalIncidenceRegisterComponent, any>, values): void {
     this._incidenceService.insert(values).subscribe(res => {
-      this.loadProjectList();
+      this.loadIncidenceList();
       dialogRef.close();
     });
   }
 
-  editProject(dialogRef: MatDialogRef<ModalIncidenceRegisterComponent, any>, values, projectId: number): void {
-    this._incidenceService.update(values, projectId).subscribe(res => {
-      this.loadProjectList();
+  editIncidence(dialogRef: MatDialogRef<ModalIncidenceRegisterComponent, any>, values, incidenceId: number): void {
+    this._incidenceService.update(values, incidenceId).subscribe(res => {
+      this.loadIncidenceList();
       dialogRef.close();
     });
   }
 
-  removeClient(dialogRef: MatDialogRef<ModalCofirmComponent, any>, projectId: any): void {
-    this._incidenceService.delete(projectId).subscribe(res => {
-      this.loadProjectList();
+  removeIncidence(dialogRef: MatDialogRef<ModalCofirmComponent, any>, incidenceId: number): void {
+    this._incidenceService.delete(incidenceId).subscribe(res => {
+      this.loadIncidenceList();
       dialogRef.close();
     });
   }

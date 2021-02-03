@@ -1,26 +1,36 @@
-<!-- <h2 mat-dialog-title>{{data.client ? 'Editar proyecto': 'Registrar proyecto'}}</h2>
+<h2 mat-dialog-title>{{data.client ? 'Editar incidencia': 'Registrar incidencia'}}</h2>
 <form [formGroup]="form" (ngSubmit)="submitForm()">
   <mat-dialog-content>
-    <mat-form-field>
-      <mat-label>Nombre de proyecto</mat-label>
-      <input type="text" name="name" matInput  formControlName="name" autocomplete="off" />
-    </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Tiempo de ejecución</mat-label>
-      <input type="text" name="duration" matInput formControlName="duration" autocomplete="off" />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Dirección</mat-label>
-      <input type="text" name="address" matInput formControlName="address" autocomplete="off" />
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Clientes</mat-label>
-      <mat-select formControlName="clients" multiple>
-        <mat-option *ngFor="let client of clientList" [value]="client.client_id">{{client.name}}</mat-option>
+      <mat-label>Proyecto</mat-label>
+      <mat-select formControlName="project">
+        <mat-option *ngFor="let p of projectList" [value]="p.project_id">{{p.name}}</mat-option>
       </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Motivo</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <div>
+      <label for="">Observación levantada</label>
+      <mat-radio-group aria-label="Select an option" formControlName="state">
+        <mat-radio-button *ngFor="let row of COMBO_STATE" [value]="row.value">{{row.desc}}</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Fecha de respuesta</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateResponse">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Respuesta</mat-label>
+      <textarea matInput formControlName="solution"></textarea>
     </mat-form-field>
 
   </mat-dialog-content>
@@ -28,4 +38,4 @@
     <button mat-button mat-dialog-close type="button" (click)="onNoClick()">Cancelar</button>
     <button mat-button [mat-dialog-close]="true" type="submit">Guardar</button>
   </mat-dialog-actions>
-</form> -->
+</form>

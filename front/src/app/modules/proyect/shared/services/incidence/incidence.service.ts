@@ -17,15 +17,15 @@ export class IncidenceService {
 
     insert(body: any): Observable<any> {
         const headers = this._headerService.buildService();
-        return this._http.post(`${environment.api}${environment.apiService.project.insert}`, body, headers);
+        return this._http.post(`${environment.api}${environment.apiService.incidence.insert}`, body, headers);
     }
 
-    update(body: any, projectId: number): Observable<any> {
+    update(body: any, incidenceId: number): Observable<any> {
         const headers = this._headerService.buildService();
-        return this._http.put(`${environment.api}${environment.apiService.project.update}/${projectId}`, body, headers);
+        return this._http.put(`${environment.api}${environment.apiService.incidence.update}/${incidenceId}`, body, headers);
     }
 
-    delete(projectId: number): Observable<any> {
-        return this._http.delete(`${environment.api}${environment.apiService.project.delete}/${projectId}`)
+    delete(incidenceId: number): Observable<any> {
+        return this._http.delete(`${environment.api}${environment.apiService.incidence.delete}/${incidenceId}`)
     }
 }
