@@ -177,13 +177,16 @@ EXCEPTION
 END;
 $BODY$;
 
+-- FUNCTION: public.project_insert(character varying, character varying, character varying, integer[], integer)
+
+-- DROP FUNCTION public.project_insert(character varying, character varying, character varying, integer[], integer);
+
 CREATE OR REPLACE FUNCTION public.project_insert(
 	__p_name character varying,
 	__p_duration character varying,
 	__p_address character varying,
 	__p_clients integer[],
-	__p_person_id_register integer
-	)
+	__p_person_id_register integer)
     RETURNS jsonb
     LANGUAGE 'plpgsql'
 
@@ -224,7 +227,8 @@ BEGIN
 	 END IF;
 	 
 	__result := JSONB_BUILD_OBJECT(
-		'msj' , 'Se registró'
+		'msg' , 'Se registró',
+		'id', __project_id
 	);
 	RETURN __result;
 EXCEPTION
@@ -406,7 +410,7 @@ BEGIN
 	END IF;
 	
 	__result := JSONB_BUILD_OBJECT(
-		'msj' , 'Se registró',
+		'msg' , 'Se registró',
 		'id', __monitoring_x_project_id
 	);
 	RETURN __result;
@@ -420,6 +424,7 @@ EXCEPTION
         RETURN __result;
 END;
 $BODY$;
+
 
 -- FUNCTION: public.incidence_update(integer, character varying, character varying, timestamp without time zone, character varying, integer, integer)
 
@@ -471,7 +476,7 @@ BEGIN
 	END IF;
 	
 	__result := JSONB_BUILD_OBJECT(
-		'msj' , 'Se editó'
+		'msg' , 'Se editó'
 	);
 	RETURN __result;
 EXCEPTION
@@ -484,6 +489,7 @@ EXCEPTION
         RETURN __result;
 END;
 $BODY$;
+
 
 -- FUNCTION: public.incidence_delete(integer)
 
@@ -573,7 +579,7 @@ BEGIN
 	END IF;
 	
 	__result := JSONB_BUILD_OBJECT(
-		'msj' , 'Se registró',
+		'msg' , 'Se registró',
 		'id', __monitoring_x_project_id
 	);
 	RETURN __result;
@@ -589,6 +595,11 @@ END;
 $BODY$;
 
 
+
+-- FUNCTION: public.user_insert(character varying, character varying, integer, character varying, character varying, character varying, boolean)
+
+-- DROP FUNCTION public.user_insert(character varying, character varying, integer, character varying, character varying, character varying, boolean);
+
 CREATE OR REPLACE FUNCTION public.user_insert(
 	__p_name character varying,
 	__p_last_name character varying,
@@ -596,7 +607,7 @@ CREATE OR REPLACE FUNCTION public.user_insert(
 	__p_user character varying,
 	__p_password character varying,
 	__p_description character varying,
- 	__p_active boolean)
+	__p_active boolean)
     RETURNS jsonb
     LANGUAGE 'plpgsql'
 
@@ -637,8 +648,80 @@ BEGIN
 	        
 	
 	__result := JSONB_BUILD_OBJECT(
-		'msj' , 'Se registró',
+		'msg' , 'Se registró',
 		'id', __person_id
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;
+
+
+-- FUNCTION: public.user_update(character varying, character varying, integer, character varying, character varying, character varying, boolean, integer)
+
+-- DROP FUNCTION public.user_update(character varying, character varying, integer, character varying, character varying, character varying, boolean, integer);
+
+CREATE OR REPLACE FUNCTION public.user_update(
+	__p_name character varying,
+	__p_last_name character varying,
+	__p_role_id integer,
+	__p_user character varying,
+	__p_password character varying,
+	__p_description character varying,
+	__p_active boolean,
+	__p_person_id integer)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+	__row_count INTEGER;
+BEGIN
+	
+
+	UPDATE person
+	   SET name        = __p_name, 
+	       last_name   = __p_last_name,
+		   active      = __p_active,
+		   "user"      = __p_user,
+		   "password"  = __p_password,
+		   description =__p_description
+	 WHERE person_id = __p_person_id;
+		   
+	GET DIAGNOSTICS __row_count = ROW_COUNT;
+	IF __row_count = 0 THEN
+		RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Error al actualizar';
+	END IF;
+	
+	UPDATE role_x_person
+	   SET _role_id = __p_role_id
+	 WHERE _person_id = __p_person_id;
+		 
+	GET DIAGNOSTICS __row_count = ROW_COUNT;
+	IF __row_count = 0 THEN
+		RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Error al actualizar';
+	END IF;
+	        
+	
+	__result := JSONB_BUILD_OBJECT(
+		'msg' , 'Se editó'
 	);
 	RETURN __result;
 EXCEPTION

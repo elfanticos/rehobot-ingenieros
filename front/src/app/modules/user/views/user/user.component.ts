@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SnackBarService } from '@app/core/services/snackbar.service';
 import { ComboService } from 'src/app/core/services/combo.service';
 import { ModalCofirmComponent } from 'src/app/shared/components/modal-cofirm/modal-cofirm.component';
 import { ModalUserRegisterComponent } from '../../shared/components/modal-user-register/modal-user-register.component';
@@ -16,11 +17,13 @@ export class UserComponent implements OnInit {
   users: any[] = [];
   KEY_TABLE = KEY_TABLE;
   TITLE_COLUMNS_TABLE = TITLE_COLUMNS_TABLE;
+  loadingTable: boolean = true;
   constructor(
     private _dialog: MatDialog,
     private _userService: UserFacadeService,
     private _comboService: ComboService,
-  ) { 
+    private _snackBarService: SnackBarService
+  ) {
   }
 
   ngOnInit(): void {
@@ -28,7 +31,9 @@ export class UserComponent implements OnInit {
   }
 
   loadUserList(): void {
+    this.loadingTable = true;
     this._userService.list().subscribe(users => {
+      this.loadingTable = false;
       this.users = users;
     });
   }
@@ -75,21 +80,34 @@ export class UserComponent implements OnInit {
   registerUser(dialogRef: MatDialogRef<ModalUserRegisterComponent, any>, values): void {
     this._userService.insert(values).subscribe(res => {
       this.loadUserList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 
   editUser(dialogRef: MatDialogRef<ModalUserRegisterComponent, any>, values, userId: number): void {
     this._userService.update(values, userId).subscribe(res => {
       this.loadUserList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 
   removeUser(dialogRef: MatDialogRef<ModalCofirmComponent, any>, userId: number): void {
+    dialogRef.componentInstance.service = true;
     this._userService.delete(userId).subscribe(res => {
       this.loadUserList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 }

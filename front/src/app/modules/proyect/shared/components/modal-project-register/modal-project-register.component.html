@@ -3,17 +3,26 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Nombre de proyecto</mat-label>
-      <input type="text" name="name" matInput  formControlName="name" autocomplete="off" />
+      <input type="text" name="name" matInput  formControlName="name" autocomplete="off" required />
+      <mat-error>
+        <control-messages [control]="name"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Tiempo de ejecución</mat-label>
-      <input type="text" name="duration" matInput formControlName="duration" autocomplete="off" />
+      <input type="text" name="duration" matInput formControlName="duration" autocomplete="off" required />
+      <mat-error>
+        <control-messages [control]="duration"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Dirección</mat-label>
-      <input type="text" name="address" matInput formControlName="address" autocomplete="off" />
+      <input type="text" name="address" matInput formControlName="address" autocomplete="off" required/>
+      <mat-error>
+        <control-messages [control]="address"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
@@ -21,11 +30,14 @@
       <mat-select formControlName="clients" multiple>
         <mat-option *ngFor="let client of clientList" [value]="client.client_id">{{client.name}}</mat-option>
       </mat-select>
+      <mat-error>
+        <control-messages [control]="clients"></control-messages>
+      </mat-error>
     </mat-form-field>
 
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close type="button" (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="true" type="submit">Guardar</button>
+    <button mat-button type="button" (click)="onNoClick()">Cancelar</button>
+    <button mat-button type="submit" color="primary" [disabled]="service">{{service ? '...Guardando' : 'Guardar'}}</button>
   </mat-dialog-actions>
 </form>

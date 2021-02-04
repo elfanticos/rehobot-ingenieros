@@ -11,6 +11,7 @@ export class ModalProjectRegisterComponent implements OnInit {
   clientList: any[] = [];
   form: FormGroup;
   @Output() send: EventEmitter<any> = new EventEmitter<any>();
+  service: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<ModalProjectRegisterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -29,13 +30,21 @@ export class ModalProjectRegisterComponent implements OnInit {
 
   onNoClick = (): void => { this.dialogRef.close(); }
 
+  touchedInputs(): void {
+    this.form.markAllAsTouched();
+    this.name.markAsDirty();
+    this.duration.markAsDirty();
+    this.address.markAsDirty();
+    this.clients.markAsDirty();
+  }
+
   private _buildForm(): FormGroup {
     const project: any = this.data.project || {};
     const clients: any[] = Array.from((project.clients || []), f => f['client_id']);
     const inputs: any = {
-      name: [project.name, [Validators.required]],
-      duration: [project.duration, [Validators.required]],
-      address: [project.address, [Validators.required]],
+      name: [project.name, [Validators.required, Validators.minLength(6), Validators.maxLength(120)]],
+      duration: [project.duration, [Validators.required, Validators.minLength(6), Validators.maxLength(50)]],
+      address: [project.address, [Validators.required, Validators.minLength(6), Validators.maxLength(200)]],
       clients: [clients]
     };
 
@@ -43,6 +52,11 @@ export class ModalProjectRegisterComponent implements OnInit {
   }
 
   submitForm(): void {
+
+    this.touchedInputs();
+    if (this.form.invalid) return;
+    
+    this.service = true;
     this.send.emit(this.form.value);
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SnackBarService } from '@app/core/services/snackbar.service';
 import { ComboService } from 'src/app/core/services/combo.service';
 import { ModalCofirmComponent } from 'src/app/shared/components/modal-cofirm/modal-cofirm.component';
 import { ModalProjectRegisterComponent } from '../../shared/components/modal-project-register/modal-project-register.component';
@@ -16,10 +17,12 @@ export class ProjectComponent implements OnInit {
   projects: any[] = [];
   KEY_TABLE = KEY_TABLE;
   TITLE_COLUMNS_TABLE = TITLE_COLUMNS_TABLE;
+  loadingTable: boolean = true;
   constructor(
     private _dialog: MatDialog,
     private _projectService: ProjectFacadeService,
-    private _comboService: ComboService
+    private _comboService: ComboService,
+    private _snackBarService: SnackBarService
   ) { }
 
   ngOnInit(): void {
@@ -27,7 +30,9 @@ export class ProjectComponent implements OnInit {
   }
 
   loadProjectList(): void {
+    this.loadingTable = true;
     this._projectService.list().subscribe(projects => {
+      this.loadingTable = false;
       this.projects = projects;
     });
   }
@@ -76,21 +81,33 @@ export class ProjectComponent implements OnInit {
   registerProject(dialogRef: MatDialogRef<ModalProjectRegisterComponent, any>, values): void {
     this._projectService.insert(values).subscribe(res => {
       this.loadProjectList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 
   editProject(dialogRef: MatDialogRef<ModalProjectRegisterComponent, any>, values, projectId: number): void {
     this._projectService.update(values, projectId).subscribe(res => {
       this.loadProjectList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 
   removeProject(dialogRef: MatDialogRef<ModalCofirmComponent, any>, projectId: number): void {
     this._projectService.delete(projectId).subscribe(res => {
       this.loadProjectList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 }

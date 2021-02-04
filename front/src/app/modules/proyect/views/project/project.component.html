@@ -12,6 +12,7 @@
         [data]="projects"
         [displayedColumns]="KEY_TABLE"
         [titlesColumns]="TITLE_COLUMNS_TABLE"
+        [loading]="loadingTable"
         (edit)="openModalEdit($event)"
         (remove)="openModalConfirmDelete($event)"
       ></app-table-generic>

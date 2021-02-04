@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ModalCofirmComponent implements OnInit {
   @Output() send: EventEmitter<any> = new EventEmitter();
+  service: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<ModalCofirmComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,

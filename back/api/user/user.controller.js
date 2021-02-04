@@ -27,7 +27,7 @@ controller.list = async(req, res) => {
  */
 controller.insert = async(req, res) => {
     try {
-
+        console.log(req.body);
         const { user, password, role, active, full_name, description } = req.body;
 
         if (!full_name || !role) {

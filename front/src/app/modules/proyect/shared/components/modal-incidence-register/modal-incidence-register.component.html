@@ -4,17 +4,23 @@
 
     <mat-form-field>
       <mat-label>Proyecto</mat-label>
-      <mat-select formControlName="project">
+      <mat-select formControlName="project" required>
         <mat-option *ngFor="let p of projectList" [value]="p.project_id">{{p.name}}</mat-option>
       </mat-select>
+      <mat-error>
+        <control-messages [control]="project"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Motivo</mat-label>
-      <textarea matInput formControlName="description"></textarea>
+      <textarea matInput formControlName="description" required></textarea>
+      <mat-error>
+        <control-messages [control]="description"></control-messages>
+      </mat-error>
     </mat-form-field>
 
-    <div>
+    <div class="radio-group">
       <label for="">Observación levantada</label>
       <mat-radio-group aria-label="Select an option" formControlName="state">
         <mat-radio-button *ngFor="let row of COMBO_STATE" [value]="row.value">{{row.desc}}</mat-radio-button>
@@ -26,16 +32,22 @@
       <input matInput [matDatepicker]="picker" formControlName="dateResponse">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
+      <mat-error>
+        <control-messages [control]="dateResponse"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Respuesta</mat-label>
       <textarea matInput formControlName="solution"></textarea>
+      <mat-error>
+        <control-messages [control]="solution"></control-messages>
+      </mat-error>
     </mat-form-field>
 
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close type="button" (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="true" type="submit">Guardar</button>
+    <button mat-button type="button" (click)="onNoClick()">Cancelar</button>
+    <button mat-button type="submit" color="primary" [disabled]="service">{{service ? '...Guardando' : 'Guardar'}}</button>
   </mat-dialog-actions>
 </form>

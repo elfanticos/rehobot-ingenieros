@@ -8,17 +8,23 @@
         <mat-card-content>
           <mat-form-field>
             <mat-label>Proyecto</mat-label>
-            <mat-select formControlName="project">
+            <mat-select formControlName="project" required>
               <mat-option *ngFor="let p of projectList" [value]="p.project_id">{{p.name}}</mat-option>
             </mat-select>
+            <mat-error>
+              <control-messages [control]="form.get('project')"></control-messages>
+            </mat-error>
           </mat-form-field>
           <mat-form-field>
             <mat-label>Motivo</mat-label>
-            <textarea matInput formControlName="description"></textarea>
+            <textarea matInput formControlName="description" required></textarea>
+            <mat-error>
+              <control-messages [control]="form.get('description')"></control-messages>
+            </mat-error>
           </mat-form-field>
         </mat-card-content>
         <mat-card-actions >
-          <button mat-button type="submit">Guardar</button>
+          <button mat-button type="submit" color="primary" [disabled]="service">{{service ? '...Guardando' : 'Guardar'}}</button>
         </mat-card-actions>
       </form>
     </mat-card>

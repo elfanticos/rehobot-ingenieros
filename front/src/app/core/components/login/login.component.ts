@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '@app/core/services/authentication.service';
+import { LocalStorageService } from '@app/core/services/local-storage.service';
 // import { SharedConstants } from '@app/shared/shared.constants';
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit {
     private _authenticationService: AuthenticationService,
     private _router: Router,
     private _snackBarService: SnackBarService,
+    private _localStorageService: LocalStorageService,
     private _fb: FormBuilder
   ) {
     this.formLogin = this._buildForm();
@@ -57,10 +59,9 @@ export class LoginComponent implements OnInit {
     this.service = true;
     
     this._authenticationService.login(this.username.value, this.password.value).subscribe((data: any) => {
-      localStorage.setItem('token', data.access_token);
-      this._router.navigate(['intranet/prospectos']);
+      this._localStorageService.set('token', data.token);
+      this._router.navigate(['/']);
     }, err => {
-      this._snackBarService.show({message: 'Usuario y/o Contrase\u00F1a incorrecta'});
       console.log(err);
     });
   }

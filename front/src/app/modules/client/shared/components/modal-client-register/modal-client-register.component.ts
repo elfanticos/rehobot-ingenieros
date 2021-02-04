@@ -25,6 +25,7 @@ export class ModalClientRegisterComponent implements OnInit {
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
   form: FormGroup;
   @Output() send: EventEmitter<any> = new EventEmitter<any>();
+  service: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<ModalClientRegisterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -44,20 +45,26 @@ export class ModalClientRegisterComponent implements OnInit {
 
   onNoClick = (): void => { this.dialogRef.close(); }
 
+  touchedInputs(): void {
+    this.form.markAllAsTouched();
+    this.name.markAsDirty();
+    this.ruc.markAsDirty();
+    this.address.markAsDirty();
+    this.projects.markAsDirty();
+  }
+
   private _buildForm(): FormGroup {
-    console.log(this.data);
     const client: any = this.data.client || {};
 
     const inputs: any = {
-      name: [client.name, [Validators.required]],
-      ruc: [client.ruc, [Validators.required]],
-      address: [client.address, [Validators.required]],
+      name: [client.name, [Validators.required, Validators.minLength(6), Validators.maxLength(200)]],
+      ruc: [client.ruc, [Validators.required, Validators.minLength(6), Validators.maxLength(17)]],
+      address: [client.address, [Validators.required, Validators.minLength(6), Validators.maxLength(250)]],
     };
 
     if (client.projects) {
       const keyProjects = Array.from((client.projects || []), f => f['name']);
       inputs.projects = [keyProjects];
-      console.log(keyProjects);
       this.projectsSelected = keyProjects;
     } else {
       inputs.projects = [null]
@@ -73,6 +80,11 @@ export class ModalClientRegisterComponent implements OnInit {
   }
 
   submitForm(): void {
+
+    this.touchedInputs();
+    if (this.form.invalid) return;
+    
+    this.service = true;
     this.send.emit(this.form.value);
   }
 

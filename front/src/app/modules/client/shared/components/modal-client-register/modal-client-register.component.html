@@ -3,17 +3,26 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Nombre o Razón social</mat-label>
-      <input type="text" name="name" matInput  formControlName="name" autocomplete="off" />
+      <input type="text" name="name" matInput  formControlName="name" autocomplete="off" required/>
+      <mat-error>
+        <control-messages [control]="name"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>RUC</mat-label>
-      <input type="text" name="ruc" matInput formControlName="ruc" autocomplete="off" />
+      <input type="text" name="ruc" matInput formControlName="ruc" autocomplete="off" required />
+      <mat-error>
+        <control-messages [control]="ruc"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Dirección</mat-label>
-      <input type="text" name="address" matInput formControlName="address" autocomplete="off" />
+      <input type="text" name="address" matInput formControlName="address" autocomplete="off"  required />
+      <mat-error>
+        <control-messages [control]="address"></control-messages>
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="example-chip-list">
@@ -28,16 +37,19 @@
           [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
           (matChipInputTokenEnd)="add($event)">
       </mat-chip-list>
-      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)" required>
         <mat-option *ngFor="let project of filteredProjects | async" [value]="project">
           {{project}}
         </mat-option>
       </mat-autocomplete>
+      <mat-error>
+        <control-messages [control]="projects"></control-messages>
+      </mat-error>
     </mat-form-field>
 
   </mat-dialog-content>
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close type="button" (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="true" type="submit">Guardar</button>
+    <button mat-button type="button" (click)="onNoClick()">Cancelar</button>
+    <button mat-button type="submit" color="primary" [disabled]="service">{{service ? '...Guardando' : 'Guardar'}}</button>
   </mat-dialog-actions>
 </form>

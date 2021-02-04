@@ -18,6 +18,7 @@ export class TableGenericComponent implements AfterViewInit {
   }
   @Input() displayedColumns: string[] = [];
   @Input() titlesColumns: Object = {};
+  @Input() loading: boolean = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;

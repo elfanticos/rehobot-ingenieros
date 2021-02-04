@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { SnackBarService } from '@app/core/services/snackbar.service';
 import { ComboService } from 'src/app/core/services/combo.service';
 import { ModalCofirmComponent } from 'src/app/shared/components/modal-cofirm/modal-cofirm.component';
 import { ModalIncidenceRegisterComponent } from '../../shared/components/modal-incidence-register/modal-incidence-register.component';
@@ -18,11 +19,13 @@ export class IncidenceComponent implements OnInit {
   KEY_TABLE = KEY_TABLE;
   TITLE_COLUMNS_TABLE = TITLE_COLUMNS_TABLE;
   form: FormGroup;
+  loadingTable: boolean = true;
   constructor(
     private _dialog: MatDialog,
     private _incidenceService: IncidenceFacadeService,
     private _comboService: ComboService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _snackBarService: SnackBarService
   ) { 
     this.form = this._buildForm();
   }
@@ -40,7 +43,9 @@ export class IncidenceComponent implements OnInit {
 
   loadIncidenceList(): void {
     const { project, dateRegister } = this.form.value;
+    this.loadingTable = true;
     this._incidenceService.list(project, dateRegister).subscribe(incidences => {
+      this.loadingTable = false;
       this.incidences = incidences;
     });
   }
@@ -69,7 +74,6 @@ export class IncidenceComponent implements OnInit {
 
 
   openModalEdit(incidence: any): void {
-    console.log(incidence);
     this.openModalRegister(incidence);
   }
 
@@ -90,21 +94,34 @@ export class IncidenceComponent implements OnInit {
   registerIncidence(dialogRef: MatDialogRef<ModalIncidenceRegisterComponent, any>, values): void {
     this._incidenceService.insert(values).subscribe(res => {
       this.loadIncidenceList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 
   editIncidence(dialogRef: MatDialogRef<ModalIncidenceRegisterComponent, any>, values, incidenceId: number): void {
     this._incidenceService.update(values, incidenceId).subscribe(res => {
       this.loadIncidenceList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 
   removeIncidence(dialogRef: MatDialogRef<ModalCofirmComponent, any>, incidenceId: number): void {
+    dialogRef.componentInstance.service = true;
     this._incidenceService.delete(incidenceId).subscribe(res => {
       this.loadIncidenceList();
+      this._snackBarService.show({ message: res.res.msg });
+      dialogRef.componentInstance.service = false;
       dialogRef.close();
+    }, () => {
+      dialogRef.componentInstance.service = false;
     });
   }
 }

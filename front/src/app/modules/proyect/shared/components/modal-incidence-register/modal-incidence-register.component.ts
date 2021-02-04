@@ -37,7 +37,7 @@ export class ModalIncidenceRegisterComponent implements OnInit {
   form: FormGroup;
   COMBO_STATE = COMBO_STATE;
   @Output() send: EventEmitter<any> = new EventEmitter<any>();
-
+  service: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<ModalIncidenceRegisterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -57,26 +57,39 @@ export class ModalIncidenceRegisterComponent implements OnInit {
 
   onNoClick = (): void => { this.dialogRef.close(); }
 
+  touchedInputs(): void {
+    this.form.markAllAsTouched();
+    this.project.markAsDirty();
+    this.description.markAsDirty();
+    this.state.markAsDirty();
+    this.solution.markAsDirty();
+    this.dateResponse.markAsDirty();
+  }
+
   private _buildForm(): FormGroup {
     const incidence: any = this.data.incidence || {};
     
     const inputs: any = {
       project: [incidence.project_id, [Validators.required]],
-      description: [incidence.description, [Validators.required]],
+      description: [incidence.description, [Validators.required, Validators.maxLength(250)]],
       state: [incidence.state, [Validators.required]],
-      solution: [incidence.solution],
+      solution: [incidence.solution, [Validators.maxLength(250)]],
       dateResponse: [incidence.date_response]
     };
     return this._fb.group(inputs);
   }
 
   submitForm(): void {
+
+    this.touchedInputs();
+    if (this.form.invalid) return;
+
     const values = this.form.value;
     if (values.dateResponse) {
       values.dateResponse = moment(values.dateResponse).add(2, 'hours').toDate();
     }
 
-    console.log(this.form.value);
+    this.service = true;
     this.send.emit(this.form.value);
   }
 }

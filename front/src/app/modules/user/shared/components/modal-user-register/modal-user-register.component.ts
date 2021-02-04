@@ -35,7 +35,7 @@ export class ModalUserRegisterComponent implements OnInit {
   roleList: any[] = [];
   form: FormGroup;
   @Output() send: EventEmitter<any> = new EventEmitter<any>();
-
+  service: boolean = false;
   constructor(
     public dialogRef: MatDialogRef<ModalUserRegisterComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -52,6 +52,17 @@ export class ModalUserRegisterComponent implements OnInit {
   get full_name() { return this.form.controls['full_name']; }
   get active() { return this.form.controls['active']; }
   get description() { return this.form.controls['description']; }
+  get password() { return this.form.controls['password'];}
+
+  touchedInputs(): void {
+    this.form.markAllAsTouched();
+    this.user.markAsDirty();
+    this.role.markAsDirty();
+    this.full_name.markAsDirty();
+    this.active.markAsDirty();
+    this.description.markAsDirty();
+    this.password.markAsDirty();
+  }
 
   onNoClick = (): void => { this.dialogRef.close(); }
 
@@ -59,22 +70,27 @@ export class ModalUserRegisterComponent implements OnInit {
     const user: any = this.data.user || {};
     
     const inputs: any = {
-      user: [user.user, [Validators.required]],
+      user: [user.user, [Validators.required, Validators.maxLength(20)]],
+      password: [user.password, [Validators.required]],
       role: [user.role_id, [Validators.required]],
       full_name: [user.full_name, [Validators.required]],
       active: [user.active],
-      description: [user.description]
+      description: [user.description, [Validators.maxLength(200)]]
     };
     return this._fb.group(inputs);
   }
 
   submitForm(): void {
+
+    this.touchedInputs();
+    if (this.form.invalid) return;
+
     const values = this.form.value;
     if (values.dateResponse) {
       values.dateResponse = moment(values.dateResponse).add(2, 'hours').toDate();
     }
 
-    console.log(this.form.value);
+    this.service = true;
     this.send.emit(this.form.value);
   }
 }

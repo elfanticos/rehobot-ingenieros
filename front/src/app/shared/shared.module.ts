@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 import { TableGenericComponent } from './components/table-generic/table-generic.component';
 import { ModalCofirmComponent } from './components/modal-cofirm/modal-cofirm.component';
@@ -32,7 +33,8 @@ import { ControlMessagesComponent } from './components/control-messages/control-
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     TableGenericComponent,
