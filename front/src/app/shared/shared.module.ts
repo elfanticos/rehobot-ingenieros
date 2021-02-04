@@ -13,12 +13,14 @@ import {MatDialogModule} from '@angular/material/dialog';
 
 import { TableGenericComponent } from './components/table-generic/table-generic.component';
 import { ModalCofirmComponent } from './components/modal-cofirm/modal-cofirm.component';
+import { ControlMessagesComponent } from './components/control-messages/control-messages.component';
 
 
 @NgModule({
   declarations: [
     TableGenericComponent,
-    ModalCofirmComponent
+    ModalCofirmComponent,
+    ControlMessagesComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { ModalCofirmComponent } from './components/modal-cofirm/modal-cofirm.com
   ],
   exports: [
     TableGenericComponent,
-    ModalCofirmComponent
+    ModalCofirmComponent,
+    ControlMessagesComponent
   ]
 })
 export class SharedModule { }

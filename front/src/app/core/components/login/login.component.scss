@@ -1,0 +1,80 @@
+.m-login{
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 150px);
+}
+
+.m-card__login{
+    padding: 40px;
+    box-shadow: 0px 3px 15px #00000029;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+}
+.m-card__login.detalle{
+    padding: 20px;
+    box-shadow: none;
+    border-radius: 0;
+    width: 100%;
+    max-width: 500px;
+    margin: 0;
+    text-align: left;
+}
+
+.m-card__login .m-card__title h2{
+    font-size: 48px;
+    line-height: 48px;
+    margin: 0;
+}
+.m-card__login .m-card__content{
+    width: 100%;
+    max-width: 375px;
+    margin: auto;
+    margin-top: 30px;
+}
+.m-card__login .m-card__content .m-input{
+    margin: 20px 0;
+}
+.m-card__login .m-card__content .m-input input{
+    box-shadow: 2px 2px 15px #00B5E226;
+    border: 1px solid #051C2C;
+    border-radius: 9px;
+}
+.m-card__login .m-card__actions{
+    max-width: 375px;
+    margin: auto;
+    text-align: center;
+}
+
+.m-card__login .m-card__actions button {
+width: 50%;
+}
+
+.m-footer__login{
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    height:  40px;
+    text-align: center;
+    border-top: 1px solid #AEB4BA;
+    margin-top: 30px;
+}
+.m-footer__login p{
+    font-size: 16px;
+}
+
+.m-textfield__input {
+    width: 100%;
+}
+
+.m-textfield__input mat-form-field {
+    width: 100%;
+}

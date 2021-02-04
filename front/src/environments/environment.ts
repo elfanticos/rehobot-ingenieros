@@ -35,6 +35,9 @@ export const environment = {
       insert: '/api/user/insert',
       update: '/api/user/update',
       delete: '/api/user/delete'
+    },
+    oauth: {
+      login: '/api/oauth/login'
     }
   }
 };

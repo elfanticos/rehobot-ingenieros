@@ -1,1 +1,47 @@
-<p>login works!</p>
+<section class="m-section">
+    <div class="m-container">
+        <div class="m-login" [formGroup]="formLogin">
+            <div class="m-card__login">
+                <div class="m-card__title">
+                    <h2>Bienvenidos a REHOBOT INGENIEROS</h2>
+                </div>
+                <div class="m-card__content">
+                    <div class="m-textfield__input">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Usuario</mat-label>
+                            <input type="text" matInput placeholder="" formControlName="username"  (keyup.enter)="service || login()" />
+                            <mat-icon matSuffix>person</mat-icon>
+                            <mat-error *ngIf="username.errors && username.dirty">
+                                <control-messages [control]="username"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="m-textfield__input">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Contraseña</mat-label>
+                            <input autocomplete="off" [type]="hide ? 'password' : 'text'" matInput placeholder=""
+                                formControlName="password" (keyup.enter)="service || login()" />
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="password.errors && password.dirty">
+                                <control-messages [control]="password"></control-messages>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="m-card__actions">
+                    <button type="button" mat-raised-button color="primary" [disabled]="service"
+                        (click)="service || login()"><span>INGRESAR</span></button>
+                </div>
+                <div class="text-error">
+                    <p> {{msj}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-footer__login">
+        <p>&copy;2020 Agencia B12. Todos los derechos reservados.</p>
+    </div>
+</section>
