@@ -1,0 +1,40 @@
+<h2 mat-dialog-title>{{data.client ? 'Editar incidencia': 'Registrar incidencia'}}</h2>
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <mat-dialog-content>
+
+    <mat-form-field>
+      <mat-label>Nombre usuario</mat-label>
+      <input type="text" name="user" matInput  formControlName="user" autocomplete="off" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Cargo</mat-label>
+      <mat-select formControlName="role">
+        <mat-option *ngFor="let r of roleList" [value]="r.role_id">{{r.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Nombre completo</mat-label>
+      <input type="text" name="full_name" matInput  formControlName="full_name" autocomplete="off" />
+    </mat-form-field>
+
+    <div>
+      <label for="">Activo</label>
+      <mat-radio-group aria-label="Select an option" formControlName="active">
+        <mat-radio-button  [value]="true">Sí</mat-radio-button>
+        <mat-radio-button  [value]="false">No</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close type="button" (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="true" type="submit">Guardar</button>
+  </mat-dialog-actions>
+</form>

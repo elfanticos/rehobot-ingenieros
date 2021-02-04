@@ -12,12 +12,14 @@ export class ComboService {
     ) {}
 
     projects(): Observable<any> {
-        console.log(`${environment.api}${environment.apiService.combo.projects}`);
         return this._http.get(`${environment.api}${environment.apiService.combo.projects}`);
     }
 
     clients(): Observable<any> {
-        console.log(`${environment.api}${environment.apiService.combo.clients}`);
         return this._http.get(`${environment.api}${environment.apiService.combo.clients}`);
+    }
+
+    roles(): Observable<any> {
+        return this._http.get(`${environment.api}${environment.apiService.combo.roles}`);
     }
 }

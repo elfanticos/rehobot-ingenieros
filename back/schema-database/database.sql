@@ -75,3 +75,36 @@ CREATE TABLE public.monitoring_x_project
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+CREATE TABLE public.role
+(
+    role_id serial NOT NULL,
+    name character varying(60) NOT NULL,
+    active boolean NOT NULL DEFAULT true,
+    PRIMARY KEY (role_id)
+);
+
+INSERT INTO ROLE
+(name)
+VALUES
+('Administrador'),
+('Gerente'),
+('Supervidor');
+
+CREATE TABLE public.role_x_person
+(
+    _person_id integer NOT NULL,
+    _role_id integer NOT NULL,
+    active boolean DEFAULT true,
+    PRIMARY KEY (_person_id, _role_id),
+    CONSTRAINT "FK__person___person_id" FOREIGN KEY (_person_id)
+        REFERENCES public.person (person_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT "FK__role___rol_id" FOREIGN KEY (_role_id)
+        REFERENCES public.role (role_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);

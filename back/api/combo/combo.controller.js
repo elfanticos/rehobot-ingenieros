@@ -34,4 +34,19 @@ controller.clients = async(req, res) => {
     }
 }
 
+/**
+ * 
+ * @param {express.Request} req 
+ * @param {express.Response} res 
+ */
+controller.roles = async(req, res) => {
+    try {
+        const response = await comboService.roles();
+        res.status(200).send(response);
+    } catch (error) {
+        console.log(error);
+        res.status(error.status || 500).send(error);
+    }
+}
+
 module.exports = controller;

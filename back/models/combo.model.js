@@ -26,4 +26,16 @@ model.clients = () => {
     });
 }
 
+model.roles = () => {
+    return new Promise((resolve, reject) => {
+        let sql = `SELECT role_id, name FROM role ORDER BY name`;
+        dbp.any(sql).then(data => {
+            return resolve(data);
+        }).catch(err => {
+            err.detalle = new Error().stack;
+            return reject(err);
+        });
+    });
+}
+
 module.exports = model;

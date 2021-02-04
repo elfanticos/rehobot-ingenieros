@@ -24,10 +24,17 @@ export const environment = {
     },
     combo: {
       projects: '/api/combo/projects',
-      clients: '/api/combo/clients'
+      clients: '/api/combo/clients',
+      roles: '/api/combo/roles'
     },
     advance: {
       insert: '/api/advance/insert'
+    },
+    user: {
+      list: '/api/user/list',
+      insert: '/api/user/insert',
+      update: '/api/user/update',
+      delete: '/api/user/delete'
     }
   }
 };

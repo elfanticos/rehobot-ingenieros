@@ -11,4 +11,7 @@ service.clients = async() => {
     return await comboModel.clients();
 }
 
+service.roles = async() => {
+    return await comboModel.roles();
+}
 module.exports = service;

@@ -525,3 +525,129 @@ EXCEPTION
         RETURN __result;
 END;
 $BODY$;
+
+
+-- FUNCTION: public.advance_insert(integer, character varying, integer)
+
+-- DROP FUNCTION public.advance_insert(integer, character varying, integer);
+
+CREATE OR REPLACE FUNCTION public.advance_insert(
+	__p_project_id integer,
+	__p_description character varying,
+	__p_person_id_register integer)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+	__project_x_client_id INTEGER;
+	__monitoring_x_project_id INTEGER;
+	__date_register TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW();
+	__row_count INTEGER;
+BEGIN
+	
+	SELECT project_x_client_id
+	  INTO __project_x_client_id
+	  FROM project_x_client
+	 WHERE _project_id = __p_project_id;
+	
+	
+	INSERT INTO monitoring_x_project (_project_x_client_id, type, description, state, person_id_register, date_register)
+		 VALUES (__project_x_client_id, 'AVANC', __p_description, 'REGIS', __p_person_id_register, __date_register)
+	  RETURNING monitoring_x_project_id
+	       INTO __monitoring_x_project_id;
+		   
+	GET DIAGNOSTICS __row_count = ROW_COUNT;
+	IF __row_count = 0 THEN
+		RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Error al regsitrar';
+	END IF;
+	
+	__result := JSONB_BUILD_OBJECT(
+		'msj' , 'Se registró',
+		'id', __monitoring_x_project_id
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;
+
+
+CREATE OR REPLACE FUNCTION public.user_insert(
+	__p_name character varying,
+	__p_last_name character varying,
+	__p_role_id integer,
+	__p_user character varying,
+	__p_password character varying,
+	__p_description character varying,
+ 	__p_active boolean)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+	__row_count INTEGER;
+	__person_id INTEGER;
+BEGIN
+	
+
+	INSERT INTO person (name, last_name, active, "user", "password", description)
+	     VALUES (__p_name, __p_last_name, __p_active, __p_user, __p_password, __p_description)
+	  RETURNING person_id
+	       INTO __person_id;
+		   
+	GET DIAGNOSTICS __row_count = ROW_COUNT;
+	IF __row_count = 0 THEN
+		RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Error al regsitrar';
+	END IF;
+	
+	INSERT INTO role_x_person (_role_id, _person_id)
+	     VALUES (__p_role_id, __person_id);
+		 
+	GET DIAGNOSTICS __row_count = ROW_COUNT;
+	IF __row_count = 0 THEN
+		RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Error al regsitrar';
+	END IF;
+	        
+	
+	__result := JSONB_BUILD_OBJECT(
+		'msj' , 'Se registró',
+		'id', __person_id
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;
