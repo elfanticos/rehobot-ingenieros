@@ -58,20 +58,24 @@ CREATE TABLE public.project_x_client
 );
 
 
+-- Table: public.monitoring_x_project
+
+-- DROP TABLE public.monitoring_x_project;
+
 CREATE TABLE public.monitoring_x_project
 (
     monitoring_x_project_id serial NOT NULL,
-    _project_x_client_id integer NOT NULL,
-    type character varying(5) NOT NULL,
-    description character varying(250),
-    state character varying(5) NOT NULL,
+    _project_id integer NOT NULL,
+    type character varying(5) COLLATE pg_catalog."default" NOT NULL,
+    description character varying(250) COLLATE pg_catalog."default",
+    state character varying(5) COLLATE pg_catalog."default" NOT NULL,
     solution character varying(250) COLLATE pg_catalog."default",
     date_response timestamp without time zone,
     person_id_register integer,
     date_register timestamp without time zone,
-    PRIMARY KEY (monitoring_x_project_id),
-    CONSTRAINT "FK__project_x_client__project_x_client_id" FOREIGN KEY (_project_x_client_id)
-        REFERENCES public.project_x_client (project_x_client_id) MATCH SIMPLE
+    CONSTRAINT monitoring_x_project_pkey PRIMARY KEY (monitoring_x_project_id),
+    CONSTRAINT "FK__project__project_x_client_id" FOREIGN KEY (_project_id)
+        REFERENCES public.project (project_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );

@@ -1,6 +1,12 @@
-<mat-toolbar color="primary" class>
-  <button mat-icon-button aria-label="Menú">
-    <mat-icon>menu</mat-icon>
+<mat-toolbar color="primary" class="toolbar-content">
+  <div>
+    <button mat-icon-button aria-label="Menú">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Rohobot Ingenieros</span>
+  </div>
+  <button mat-icon-button matTooltip="Cerrar sesión" (click)="logout()">
+    <mat-icon>logout</mat-icon>
   </button>
-  <span>Rohobot Ingenieros</span>
+  
 </mat-toolbar>

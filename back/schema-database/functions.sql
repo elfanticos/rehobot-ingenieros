@@ -387,20 +387,13 @@ DECLARE
 	-- Variables
 	__result JSONB;
 	__msg_excep CHARACTER VARYING;
-	__project_x_client_id INTEGER;
 	__monitoring_x_project_id INTEGER;
 	__date_register TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW();
 	__row_count INTEGER;
 BEGIN
 	
-	SELECT project_x_client_id
-	  INTO __project_x_client_id
-	  FROM project_x_client
-	 WHERE _project_id = __p_project_id;
-	
-	
-	INSERT INTO monitoring_x_project (_project_x_client_id, type, description, state, person_id_register, date_register, date_response, solution)
-		 VALUES (__project_x_client_id, 'INCID', __p_description, __p_state, __p_person_id_register, __date_register, __p_date_response, __p_solution)
+	INSERT INTO monitoring_x_project (_project_id, type, description, state, person_id_register, date_register, date_response, solution)
+		 VALUES (__p_project_id, 'INCID', __p_description, __p_state, __p_person_id_register, __date_register, __p_date_response, __p_solution)
 	  RETURNING monitoring_x_project_id
 	       INTO __monitoring_x_project_id;
 		   
@@ -453,21 +446,14 @@ DECLARE
 	-- Variables
 	__result JSONB;
 	__msg_excep CHARACTER VARYING;
-	__project_x_client_id INTEGER;
 	__row_count INTEGER;
 BEGIN
-	
-	SELECT project_x_client_id
-	  INTO __project_x_client_id
-	  FROM project_x_client 
-	 WHERE _project_id = __p_project_id;
-	
 	UPDATE monitoring_x_project
 	   SET description          = __p_description,
 	       state                = __p_state,
 		   date_response        = __p_date_response,
 		   solution             = __p_solution,
-		   _project_x_client_id = __project_x_client_id
+		   _project_id          = __p_project_id
      WHERE monitoring_x_project_id = __p_monitoring_x_project_id;
 		   
 	GET DIAGNOSTICS __row_count = ROW_COUNT;
@@ -556,20 +542,14 @@ DECLARE
 	-- Variables
 	__result JSONB;
 	__msg_excep CHARACTER VARYING;
-	__project_x_client_id INTEGER;
 	__monitoring_x_project_id INTEGER;
 	__date_register TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW();
 	__row_count INTEGER;
 BEGIN
 	
-	SELECT project_x_client_id
-	  INTO __project_x_client_id
-	  FROM project_x_client
-	 WHERE _project_id = __p_project_id;
 	
-	
-	INSERT INTO monitoring_x_project (_project_x_client_id, type, description, state, person_id_register, date_register)
-		 VALUES (__project_x_client_id, 'AVANC', __p_description, 'REGIS', __p_person_id_register, __date_register)
+	INSERT INTO monitoring_x_project (_project_id, type, description, state, person_id_register, date_register)
+		 VALUES (__p_project_id, 'AVANC', __p_description, 'REGIS', __p_person_id_register, __date_register)
 	  RETURNING monitoring_x_project_id
 	       INTO __monitoring_x_project_id;
 		   
@@ -593,7 +573,6 @@ EXCEPTION
         RETURN __result;
 END;
 $BODY$;
-
 
 
 -- FUNCTION: public.user_insert(character varying, character varying, integer, character varying, character varying, character varying, boolean)
@@ -722,6 +701,102 @@ BEGIN
 	
 	__result := JSONB_BUILD_OBJECT(
 		'msg' , 'Se editó'
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;
+
+
+-- FUNCTION: public.user_delete(integer)
+
+-- DROP FUNCTION public.user_delete(integer);
+
+CREATE OR REPLACE FUNCTION public.user_delete(
+	__p_person_id integer)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+BEGIN
+
+	DELETE FROM role_x_person 
+	      WHERE _person_id = __p_person_id;
+	
+	DELETE FROM person
+	      WHERE person_id = __p_person_id;
+	 
+	__result := JSONB_BUILD_OBJECT(
+		'msg' , 'Se eliminó'
+	);
+	RETURN __result;
+EXCEPTION
+    WHEN SQLSTATE 'ERROR' THEN
+        __result = JSONB_BUILD_OBJECT('status', 400, 'msg' , SQLERRM);
+        RETURN __result;
+    WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS __msg_excep = PG_EXCEPTION_CONTEXT;
+        __result = JSONB_BUILD_OBJECT('status', 500, 'msg' , __MSG_ERROR, 'msg_error', CONCAT(SQLERRM,' - ', __msg_excep));
+        RETURN __result;
+END;
+$BODY$;
+
+-- FUNCTION: public.login(character varying, character varying)
+
+-- DROP FUNCTION public.login(character varying, character varying);
+
+CREATE OR REPLACE FUNCTION public.login(
+	__p_user character varying,
+	__p_password character varying)
+    RETURNS jsonb
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+    
+AS $BODY$
+
+DECLARE
+	-- Constants
+	__MSG_ERROR CONSTANT CHARACTER VARYING DEFAULT 'Hubo un error';
+	
+	-- Variables
+	__result JSONB;
+	__msg_excep CHARACTER VARYING;
+	__person_id integer;
+BEGIN
+
+	SELECT person_id
+	  INTO __person_id
+	  FROM person
+     WHERE LOWER("user") = LOWER(__p_user)
+	   AND "password" = __p_password
+	   AND active = TRUE;
+	   
+	  IF __person_id IS NULL THEN
+             RAISE EXCEPTION USING ERRCODE = 'ERROR', MESSAGE = 'Usuario y/o contraseña incorrectos';
+         END IF;
+	 
+	__result := JSONB_BUILD_OBJECT(
+		'person_id', __person_id
 	);
 	RETURN __result;
 EXCEPTION

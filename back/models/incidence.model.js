@@ -44,14 +44,13 @@ model.list = (projectId, dateRegister) => {
                mxp.state,
                mxp.date_response
           FROM monitoring_x_project mxp
-               INNER JOIN project_x_client pxc
-                       ON pxc.project_x_client_id = mxp._project_x_client_id
                INNER JOIN project p
-                       ON p.project_id = pxc._project_id
+                       ON p.project_id = mxp._project_id
                       AND p.project_id = COALESCE($1, p.project_id)
          WHERE mxp.type = 'INCID'
-           AND mxp.date_register = COALESCE($2, mxp.date_register)`;
+           AND (mxp.date_register)::DATE = COALESCE(($2)::DATE, (mxp.date_register)::DATE)`;
         sql = pgpromise.as.format(sql, [projectId, dateRegister]);
+        console.log(sql);
         dbp.any(sql).then(data => {
             return resolve(data);
         }).catch(err => {

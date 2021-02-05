@@ -11,4 +11,8 @@ export class AdvanceFacadeService {
     insert(values: any): Observable<any> {
         return this._advanceService.insert(values);
     }
+
+    dataPdf(projectId: number): Observable<any> {
+        return this._advanceService.dataPdf(projectId);
+    }
 }

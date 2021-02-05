@@ -24,12 +24,17 @@ export class TableGenericComponent implements AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @Output() edit: EventEmitter<any> = new EventEmitter();
   @Output() remove: EventEmitter<any> = new EventEmitter();
+  @Output() downloadPDF: EventEmitter<any> = new EventEmitter();
   constructor() {
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  validColumCustom(column: string): boolean {
+    return ['action','report_pdf'].includes(column);
   }
 
   applyFilter(event: Event) {
@@ -47,5 +52,9 @@ export class TableGenericComponent implements AfterViewInit {
 
   removeRow(row: any): void {
     this.remove.emit(row);
+  }
+
+  downloadRowPDF(row: any): void {
+    this.downloadPDF.emit(row);
   }
 }

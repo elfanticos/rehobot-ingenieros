@@ -20,6 +20,7 @@ import { MenuComponent } from './components/menu/menu.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { SharedModule } from '@app/shared/shared.module';
 import { MainComponent } from './components/main/main.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { MainComponent } from './components/main/main.component';
     RouterModule,
     MatFormFieldModule,
     MatInputModule,
+    MatTooltipModule,
     SharedModule
   ],
   exports: [

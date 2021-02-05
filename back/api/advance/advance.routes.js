@@ -4,5 +4,6 @@ const controller = require('./advance.controller');
 
 router
     .post('/insert', controller.insert)
+    .get('/dataPdf/:id', controller.dataPdf)
 
 module.exports = router;

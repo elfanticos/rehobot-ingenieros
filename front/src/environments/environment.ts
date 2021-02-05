@@ -28,7 +28,8 @@ export const environment = {
       roles: '/api/combo/roles'
     },
     advance: {
-      insert: '/api/advance/insert'
+      insert: '/api/advance/insert',
+      dataPdf: '/api/advance/dataPdf'
     },
     user: {
       list: '/api/user/list',

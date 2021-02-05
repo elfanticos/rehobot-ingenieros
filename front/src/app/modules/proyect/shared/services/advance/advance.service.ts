@@ -15,4 +15,8 @@ export class AdvanceService {
         const headers = this._headerService.buildService();
         return this._http.post(`${environment.api}${environment.apiService.advance.insert}`, body, headers);
     }
+
+    dataPdf(projectId: number): Observable<any> {
+        return this._http.get(`${environment.api}${environment.apiService.advance.dataPdf}/${projectId}`);
+    }
 }

@@ -9,10 +9,36 @@ import { ModalIncidenceRegisterComponent } from '../../shared/components/modal-i
 import { KEY_TABLE, TITLE_COLUMNS_TABLE } from '../../shared/constants/incidence-constant';
 import { IncidenceFacadeService } from '../../shared/services/incidence.service';
 
+import * as _moment from 'moment';
+import * as _rollupMoment from 'moment';
+import { CalendarDateFormatter } from 'angular-calendar';
+import { CsCalendarDateFormatter } from '@app/core/helpers/cs-calendar-date-formatter.provider';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
+const moment = _rollupMoment || _moment;
+moment.locale('es');
+
 @Component({
   selector: 'app-incidence',
   templateUrl: './incidence.component.html',
-  styleUrls: ['./incidence.component.scss']
+  styleUrls: ['./incidence.component.scss'],
+  providers: [
+    {
+        provide: CalendarDateFormatter,
+        useClass: CsCalendarDateFormatter
+    },
+    {
+        provide: MAT_DATE_FORMATS,
+        useValue: MAT_MOMENT_DATE_FORMATS
+    },
+    {
+        provide: MAT_DATE_LOCALE,
+        useValue: 'es-ES'
+    },
+    {
+        provide: DateAdapter,
+        useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]
+    }]
 })
 export class IncidenceComponent implements OnInit {
   incidences: any[] = [];
@@ -20,6 +46,8 @@ export class IncidenceComponent implements OnInit {
   TITLE_COLUMNS_TABLE = TITLE_COLUMNS_TABLE;
   form: FormGroup;
   loadingTable: boolean = true;
+  projectList: any[] = [];
+
   constructor(
     private _dialog: MatDialog,
     private _incidenceService: IncidenceFacadeService,
@@ -32,7 +60,11 @@ export class IncidenceComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadIncidenceList();
+    this.loadProjectList();
   }
+
+  get project() { return this.form.controls['project']; }
+  get dateRegister() { return this.form.controls['dateRegister']; }
 
   private _buildForm(): FormGroup {
     return this._fb.group({
@@ -42,11 +74,20 @@ export class IncidenceComponent implements OnInit {
   }
 
   loadIncidenceList(): void {
-    const { project, dateRegister } = this.form.value;
+    let { project, dateRegister } = this.form.value;
+    if (dateRegister) {
+      dateRegister = moment(dateRegister).format('YYYY-MM-DD hh:mm a')
+    }
     this.loadingTable = true;
     this._incidenceService.list(project, dateRegister).subscribe(incidences => {
       this.loadingTable = false;
       this.incidences = incidences;
+    });
+  }
+
+  loadProjectList(): void {
+    this._comboService.projects().subscribe(projects => {
+      this.projectList = projects;
     });
   }
 
@@ -123,5 +164,9 @@ export class IncidenceComponent implements OnInit {
     }, () => {
       dialogRef.componentInstance.service = false;
     });
+  }
+
+  search(): void {
+    this.loadIncidenceList();
   }
 }

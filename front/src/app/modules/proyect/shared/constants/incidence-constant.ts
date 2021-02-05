@@ -1,6 +1,6 @@
 export const KEY_TABLE = [
     'project_name',
-    'date_response_format',
+    'date_register_format',
     'description',
     'solution',
     'action'
@@ -8,7 +8,7 @@ export const KEY_TABLE = [
 
 export const TITLE_COLUMNS_TABLE = {
     project_name: 'Proyecto',
-    date_response_format: 'Fecha',
+    date_register_format: 'Fecha',
     description: 'Tiempo de ejecución',
     solution: 'Solución',
     action: 'Acciones'
